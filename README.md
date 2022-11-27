@@ -16,7 +16,10 @@ The classification process follows the pipeline listed below:
 - **Train** and **test**
 
 ## Corpora used
-I've chosen to use as training and testing set the *EuroParl* corpora, which contain extracts of speeches from the european parliament in different languages. I used a total of 10 english corpora and 10 non english corpora
+I've chosen to use as training and testing set the *EuroParl* corpora, which contain extracts of speeches from the european parliament in different languages.
+
+I used a total of 10 english corpora and 10 non english corpora, divided into paragraphs (the split character is '\n') and labeled as *eng* or *noteng*, hence for the training and testing, the set of sentences that the segmentation process produced was split into two subsets of equal dimensions.
+
 ## Statistics
 - **Precision**: The number of true positives / true positives + false positives
 - **Recall**: The number of trie positives / true positives + false negatives
