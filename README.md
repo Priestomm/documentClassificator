@@ -4,6 +4,9 @@
 The project implements a simple classifier, written in python, using the NLTK library.
 The purpose is to recognize and classify english documents labeled as **eng** and non english texts, which are labeled as **noteng**.
 
+N.B. 
+- The repository contains both the jupyter notebook and the plain python.
+- You have to download the corpora used before running the code.
 ## Pipeline
 The classification process follows the pipeline listed below:
 - **Import** of English and NotEnglish corpora
