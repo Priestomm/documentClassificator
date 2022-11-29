@@ -16,7 +16,7 @@ for number in range(10000):
 stop_words = list(nltk.corpus.stopwords.words(lang) for lang in languages)
 punctuation = string.punctuation
 
-root = '/Users/tommasodelprete/nltk_data/corpora/europarl_raw/'
+root = './data/europarl_raw/'
 
 english = EuroparlCorpusReader(root, '.*\.en')
 documents = list()
@@ -24,33 +24,36 @@ for fileid in english.fileids():
     for sentence in english.raw(fileid).split('\n'):
         documents.append((sentence, 'eng'))
 
-print(len(documents))
-prefToLang = {'da':'danish', 'nl':'dutch', 'fi':'finnish', 'de':'german', 'fr':'french', 'it':'italian', 'pt':'portuguese', 'el':'greek', 'es':'spanish', 'sv':'swedish'}
+prefToLang = {'da': 'danish', 'nl': 'dutch', 'fi': 'finnish', 'de': 'german', 'fr': 'french', 'it': 'italian',
+              'pt': 'portuguese', 'el': 'greek', 'es': 'spanish', 'sv': 'swedish'}
 
 for lang in prefToLang.keys():
     non_english = EuroparlCorpusReader(root, ".*\.{}".format(lang))
     for sentence in non_english.raw(f'{prefToLang[lang]}/ep-00-01-17.{lang}').split('\n'):
         documents.append((sentence, 'noteng'))
 
-print(len(documents))
+print(f"Number of paragraphs: {len(documents)}")
 random.shuffle(documents)
 
 stemmer = PorterStemmer()
 lemmatizer = WordNetLemmatizer()
 
+print("Tokenizing...")
 words = list()
 for document in documents:
     for word in word_tokenize(document[0]):
         words.append(word)
 words_without_sw = []
 
+print("Stemming...\nLemmatizing...\nRemoving stopwords and punctuation...")
 for word in words:
     if word not in stop_words and word not in punctuation and word not in numbers:
         # print(f"{word} : {lemmatizer.lemmatize(word)} : {stemmer.stem(lemmatizer.lemmatize(word))}")
         words_without_sw.append(lemmatizer.lemmatize(stemmer.stem(word)))
 
-freq = nltk.probability.FreqDist(words_without_sw)# BOW
+freq = nltk.probability.FreqDist(words_without_sw)  # BOW
 word_feature = list(freq)[:5000]
+
 
 def document_features(document):
     document_words = word_tokenize(document)
@@ -59,13 +62,16 @@ def document_features(document):
         features['contains({})'.format(word)] = (word in document_words)
     return features
 
-featuresets = [(document_features(d), c) for (d,c) in documents]
 
-print(len(featuresets))
-train_set, test_set = featuresets[math.floor(len(featuresets)/2):], featuresets[:math.floor(len(featuresets)/2)]
+featuresets = [(document_features(d), c) for (d, c) in documents]
+
+train_set, test_set = featuresets[math.floor(len(featuresets) / 2):], featuresets[:math.floor(len(featuresets) / 2)]
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 
-print(classifier.classify(document_features("mauro")))
+file = open('prova.txt', 'r')
+test_text = file.read()
+print(f"Test text: {test_text}")
+print(f"Language: {classifier.classify(document_features(test_text))}")
 
 refMat = list()
 testMat = list()
