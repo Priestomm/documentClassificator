@@ -1,5 +1,4 @@
-# Assignment 1
-## _The Naive Bayes Classifier_
+# _The Naive Bayes Classifier_
 
 The project implements a simple classifier, written in python, using the NLTK library.
 The purpose is to recognize and classify english documents labeled as **eng** and non english texts, which are labeled as **noteng**.
